@@ -1,5 +1,8 @@
 PY := python
 
+# Compute next patch version from latest git tag (e.g., v0.1.5 -> 0.1.6)
+VERSION ?= $(shell git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' | awk -F. '{ $$NF = $$NF + 1; OFS="."; print $$0 }')
+
 generate:
 	$(PY) -m bron_sdk_py.codegen.generator bron-open-api-public.json src/bron_sdk_py/types src/bron_sdk_py/api
 
