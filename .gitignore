@@ -1,0 +1,41 @@
+__pycache__
+.pytest_cache
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# env/venv
+.env
+.env.*
+.python-version
+.venv/
+venv/
+
+# editors/OS
+.DS_Store
+.idea/
+.vscode/
+
+# coverage/testing/typecheck
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+.ipynb_checkpoints
+
+# packaging
+pip-wheel-metadata/
+.eggs/
+__pypackages__/
+
+# logs
+*.log
+
+
