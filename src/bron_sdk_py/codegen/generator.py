@@ -49,27 +49,28 @@ class OpenApiSdkGenerator:
     def _generate_types(self) -> None:
         schemas: Dict[str, Any] = self.spec.get("components", {}).get("schemas", {})
         for name, schema in schemas.items():
-            content = self._generate_type_definition(name, schema)
-            with open(os.path.join(self.types_dir, f"{name}.py"), "w", encoding="utf-8") as f:
+            content, py_name = self._generate_type_definition(name, schema)
+            with open(os.path.join(self.types_dir, f"{py_name}.py"), "w", encoding="utf-8") as f:
                 f.write(content + "\n")
 
-    def _generate_type_definition(self, name: str, schema: Dict[str, Any]) -> str:
+    def _generate_type_definition(self, name: str, schema: Dict[str, Any]) -> Tuple[str, str]:
+        py_name = self._to_snake(name)
         if schema.get("enum"):
-            return self._generate_enum(name, schema)
+            return self._generate_enum(py_name, schema), py_name
         if (schema.get("allOf") and len(schema["allOf"]) == 1 and schema["allOf"][0].get("$ref")):
             ref_name = self._extract_ref_name(schema["allOf"][0]["$ref"])
-            return f"from .{ref_name} import {ref_name}\n\n{ref_name}  # re-export alias for {name}"
+            return (f"from .{ref_name} import {ref_name}\n\n{ref_name}  # re-export alias for {py_name}", py_name)
         if schema.get("$ref"):
             ref_name = self._extract_ref_name(schema["$ref"])
-            return f"from .{ref_name} import {ref_name}\n\n{ref_name}  # re-export alias for {name}"
+            return (f"from .{ref_name} import {ref_name}\n\n{ref_name}  # re-export alias for {py_name}", py_name)
         if self._is_empty_object(schema):
-            return f"from typing import Dict, Any\n\n{name} = Dict[str, Any]"
+            return (f"from typing import Dict, Any\n\n{py_name} = Dict[str, Any]", py_name)
         if schema.get("type") == "object" or schema.get("properties"):
-            return self._generate_typed_dict(name, schema)
-        return f"from typing import Any\n\n{name} = Any"
+            return (self._generate_typed_dict(py_name, schema), py_name)
+        return (f"from typing import Any\n\n{py_name} = Any", py_name)
 
-    def _generate_enum(self, name: str, schema: Dict[str, Any]) -> str:
-        lines = ["from enum import Enum", "\n", f"class {name}(Enum):"]
+    def _generate_enum(self, name_snake: str, schema: Dict[str, Any]) -> str:
+        lines = ["from enum import Enum", "\n", f"class {name_snake}(Enum):"]
         for v in schema.get("enum", []):
             if isinstance(v, str):
                 const_name = re.sub(r"[^A-Za-z0-9_]", "_", v.upper())
@@ -78,7 +79,7 @@ class OpenApiSdkGenerator:
                 lines.append(f"    {const_name} = \"{v}\"")
         return "\n".join(lines)
 
-    def _generate_typed_dict(self, name: str, schema: Dict[str, Any]) -> str:
+    def _generate_typed_dict(self, name_snake: str, schema: Dict[str, Any]) -> str:
         required = set(schema.get("required", []) or [])
         props = schema.get("properties", {}) or {}
         imports: List[str] = [
@@ -93,7 +94,7 @@ class OpenApiSdkGenerator:
             final_type = py_type if prop in required else (opt if opt else py_type)
             fields.append(f"    {prop}: {final_type}")
 
-        return "\n".join(imports + ["", f"class {name}(TypedDict, total=False):"] + (fields or ["    pass"]))
+        return "\n".join(imports + ["", f"class {name_snake}(TypedDict, total=False):"] + (fields or ["    pass"]))
 
     def _resolve_type(self, schema: Dict[str, Any]) -> str:
         if "$ref" in schema:
@@ -135,36 +136,23 @@ class OpenApiSdkGenerator:
                 if not summary:
                     continue
                 file_name = self._get_file_name(op)
-                file_data.setdefault(file_name, {"types": set(), "methods": [], "query_params": {}})
+                file_data.setdefault(file_name, {"types": set(), "methods": []})
 
                 return_type = self._get_return_type(op)
                 if return_type:
                     file_data[file_name]["types"].add(return_type)
 
-                # include request body type (if any) so it's imported behind TYPE_CHECKING
+                # include request body type (if any)
                 body_type = self._get_request_body_type(op)
                 if body_type:
                     file_data[file_name]["types"].add(body_type)
 
-                # collect query params for this file (exclude workspaceId)
-                for p in (op.get("parameters", []) or []):
-                    if p.get("in") == "query":
-                        name = p.get("name")
-                        if name and name != "workspaceId":
-                            # store simple schema info; last one wins on duplicates
-                            file_data[file_name]["query_params"][name] = p.get("schema") or {}
-
-                method_code = self._generate_method(op, method, route)
+                method_code, qtype_name = self._generate_method(op, method, route)
+                if qtype_name:
+                    file_data[file_name]["types"].add(qtype_name)
                 file_data[file_name]["methods"].append(method_code)
 
         for file_name, data in file_data.items():
-            # if collected query params, emit a Query TypedDict and add to used types
-            if data.get("query_params"):
-                qtype = f"{self._to_pascal(file_name)}sQuery"
-                self._write_query_type_file(qtype, data["query_params"]) 
-                data["types"].add(qtype)
-                data["query_type_name"] = qtype
-
             content = self._generate_api_file(file_name, data)
             with open(os.path.join(self.api_dir, f"{file_name}.py"), "w", encoding="utf-8") as f:
                 f.write(content)
@@ -191,8 +179,8 @@ class OpenApiSdkGenerator:
             ]
         )
 
-    def _generate_method(self, op: Dict[str, Any], method: str, route: str) -> str:
-        func_name = self._to_camel(self._to_pascal(op.get("summary", "")).replace("ID", "Id"))
+    def _generate_method(self, op: Dict[str, Any], method: str, route: str) -> Tuple[str, Optional[str]]:
+        func_name = self._to_snake(op.get("summary", "").replace("ID", "Id"))
 
         # params
         path_params = [p for p in op.get("parameters", []) if p.get("in") == "path" and p.get("name") != "workspaceId"]
@@ -202,9 +190,19 @@ class OpenApiSdkGenerator:
         args: List[str] = ["self"]
         for p in path_params:
             args.append(f"{p['name']}: str")
+
+        qtype_name: Optional[str] = None
         if query_params:
-            qtype = f"{self._to_pascal(self._get_file_name(op))}sQuery"
-            args.append(f"query: Optional[{qtype}] = None")
+            method_snake = self._to_snake(op.get("summary", "").replace("ID", "Id"))
+            qtype_name = f"{method_snake}_query"
+            qp: Dict[str, Any] = {}
+            for p in query_params:
+                pname = p.get("name")
+                if pname and pname != "workspaceId":
+                    qp[pname] = p.get("schema") or {}
+            self._write_query_type_file(qtype_name, qp)
+            args.append(f"query: Optional[{qtype_name}] = None")
+
         if has_body:
             body_type = self._get_request_body_type(op)
             if body_type:
@@ -224,7 +222,7 @@ class OpenApiSdkGenerator:
             path_build.append("path = path.format(**locals())")
 
         call_args = [f"method='{method.upper()}'", "path=path"]
-        if query_params:
+        if qtype_name:
             call_args.append("query=query")
         if has_body:
             call_args.append("body=body")
@@ -236,7 +234,7 @@ class OpenApiSdkGenerator:
         if return_type:
             call_expr = f"cast(\"{return_type}\", {call_expr})"
 
-        return "\n".join(
+        method_src = "\n".join(
             [
                 f"    async def {func_name}({', '.join(args)}){ret_annot}:",
                 f"        {path_build[0]}",
@@ -245,6 +243,7 @@ class OpenApiSdkGenerator:
                 "",
             ]
         )
+        return method_src, qtype_name
 
     def _write_query_type_file(self, name: str, params: Dict[str, Any]) -> None:
         """Emit a TypedDict for query params (all optional)."""
@@ -283,7 +282,7 @@ class OpenApiSdkGenerator:
         return self._to_camel(tags[0]) if tags else "misc"
 
     def _extract_ref_name(self, ref: str) -> str:
-        return ref.split("/")[-1]
+        return self._to_snake(ref.split("/")[-1])
 
     def _to_camel(self, s: str) -> str:
         if not s:
@@ -295,6 +294,17 @@ class OpenApiSdkGenerator:
 
     def _to_pascal(self, s: str) -> str:
         return re.sub(r"(^|[^a-zA-Z0-9]+)([a-zA-Z0-9])", lambda m: (m.group(2) or "").upper(), s)
+
+    def _to_snake(self, s: str) -> str:
+        if not s:
+            return s
+        # Replace separators with spaces
+        s = re.sub(r"[\-\s]+", "_", s)
+        # Handle CamelCase to snake_case
+        s = re.sub(r"([^_])([A-Z][a-z]+)", r"\1_\2", s)
+        s = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s)
+        s = s.replace("__", "_")
+        return s.lower()
 
 
 def main() -> None:

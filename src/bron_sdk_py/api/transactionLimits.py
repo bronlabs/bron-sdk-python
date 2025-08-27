@@ -1,22 +1,22 @@
 from typing import Optional, TYPE_CHECKING, cast
 from ..utils.http import HttpClient
 if TYPE_CHECKING:
-    from ..types.TransactionLimit import TransactionLimit
-    from ..types.TransactionLimits import TransactionLimits
-    from ..types.TransactionLimitssQuery import TransactionLimitssQuery
+    from ..types.get_transaction_limits_query import get_transaction_limits_query
+    from ..types.transaction_limit import transaction_limit
+    from ..types.transaction_limits import transaction_limits
 
 class TransactionLimitsAPI:
     def __init__(self, http: HttpClient, workspace_id: Optional[str] = None) -> None:
         self._http = http
         self._workspace_id = workspace_id
 
-    async def getTransactionLimits(self, query: Optional[TransactionLimitssQuery] = None) -> "TransactionLimits":
+    async def get_transaction_limits(self, query: Optional[get_transaction_limits_query] = None) -> "transaction_limits":
         path = "/workspaces/{ws}/transaction-limits"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("TransactionLimits", await self._http.request(method='GET', path=path, query=query))
+        return cast("transaction_limits", await self._http.request(method='GET', path=path, query=query))
 
-    async def getTransactionLimitById(self, limitId: str) -> "TransactionLimit":
+    async def get_transaction_limit_by_id(self, limitId: str) -> "transaction_limit":
         path = "/workspaces/{ws}/transaction-limits/{limitId}"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("TransactionLimit", await self._http.request(method='GET', path=path))
+        return cast("transaction_limit", await self._http.request(method='GET', path=path))
 

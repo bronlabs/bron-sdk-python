@@ -1,3 +1,3 @@
 from typing import Dict, Any
 
-Unit = Dict[str, Any]
+unit = Dict[str, Any]

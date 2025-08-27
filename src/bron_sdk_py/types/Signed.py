@@ -1,3 +1,3 @@
 from typing import Dict, Any
 
-Signed = Dict[str, Any]
+signed = Dict[str, Any]

@@ -1,3 +1,3 @@
 from typing import Dict, Any
 
-Stakes = Dict[str, Any]
+stakes = Dict[str, Any]

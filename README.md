@@ -21,6 +21,7 @@ pip install -e .
 ```python
 import os, asyncio, uuid
 from bron_sdk_py import BronClient
+import bron_sdk_py.types as types
 
 async def main():
 	client = BronClient(
@@ -28,73 +29,42 @@ async def main():
 		workspace_id=os.environ["BRON_WORKSPACE_ID"],
 	)
 
-	ws = await client.workspaces.getWorkspaceById()
-	print(ws)
+	# Workspace
+	ws = await client.workspaces.get_workspace_by_id()
+	print("your workspace:", ws)
 
-	await client.accounts.getAccounts()
+	# Accounts
+	accounts = await client.accounts.get_accounts()
+	print("accounts:")
+	for a in accounts.get("accounts", []):
+		print(" -", a.get("accountId"), a.get("name"))
+	if not accounts.get("accounts"):
+		await client.aclose(); return
+	account_id = accounts["accounts"][0]["accountId"]
 
-	account_id = "nlvl2t3azfeszd04jsar4fa8"
-	to = "0x39695a3B42aae1Fb89De54A0cef03fbC30Aa9B80"
-	asset_id = "10002"
+	# Optional typed query: balances for the first account (limit 5)
+	balances = await client.balances.get_balances(types.get_balances_query(accountIds=[account_id], limit="5"))
+	print("balances (limit 5):")
+	for b in balances.get("balances", []):
+		print(" -", b.get("assetId"), b.get("symbol"), b.get("totalBalance"))
 
-	tx = await client.transactions.createTransaction({
+	# Send a withdrawal transaction from that account
+	tx_body: types.create_transaction = {
 		"accountId": account_id,
 		"externalId": str(uuid.uuid4()),
-		"transactionType": "withdrawal",
+		"transactionType": types.transaction_type.WITHDRAWAL.value,
 		"params": {
 			"amount": "0.0001",
-			"assetId": asset_id,
-			"toAddress": to,
+			"assetId": "10002",
+			"toAddress": "0x39695a3B42aae1Fb89De54A0cef03fbC30Aa9B80",
 		},
-	})
-	print("Created tx", tx.get("transactionId"))
+	}
+	tx = await client.transactions.create_transaction(tx_body)
+	print("created tx:", tx.get("transactionId"))
 
 	await client.aclose()
 
 asyncio.run(main())
-```
-
-**Get Accounts & Balances:**
-
-```python
-import asyncio, os
-from bron_sdk_py import BronClient
-
-async def main():
-	client = BronClient(api_key=os.environ["BRON_API_KEY"], workspace_id=os.environ["BRON_WORKSPACE_ID"]) 
-
-	accounts = await client.accounts.getAccounts()
-	balances = await client.balances.getBalances()
-
-	if accounts["accounts"]:
-		account = accounts["accounts"][0]
-		filtered = await client.balances.getBalances({"accountIds": [account["accountId"]]})
-		for b in filtered["balances"]:
-			print("Balance", b.get("assetId"), b.get("symbol"), b.get("totalBalance"))
-
-	await client.aclose()
-
-asyncio.run(main())
-```
-
-**More Examples:**
-
-```python
-# Get transactions
-transactions = await client.transactions.getTransactions()
-
-# Filtered transactions
-recent = await client.transactions.getTransactions({"limit": "10"})
-
-# Assets / Dictionaries
-assets = await client.assets.getAssets()
-
-# Address book record
-record = await client.addressBook.createAddressBookRecord({
-	"name": "My Address",
-	"address": "0x428CdE5631142916F295d7bb2DA9d1b5f49F0eF9",
-	"networkId": "testETH",
-})
 ```
 
 ## Async requirement
@@ -113,21 +83,7 @@ The SDK generates an ES256 JWT per request from your private JWK and sends it in
 
 ## Query Parameters
 
-- Call without parameters: `await client.accounts.getAccounts()`
-- Or pass a dict: `await client.accounts.getAccounts({"limit": "10"})`
-
-## Return Types
-
-API methods return JSON-like Python dicts.
-
-## Error Handling
-
-```python
-try:
-	ws = await client.workspaces.getWorkspaceById()
-except Exception as e:
-	print("API error:", e)
-```
+- Methods accept typed query objects (e.g., `get_balances_query`) or compatible dicts.
 
 ## Key Generation
 

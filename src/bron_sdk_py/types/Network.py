@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Optional, TypedDict
 
-class Network(TypedDict, total=False):
+class network(TypedDict, total=False):
     addressExplorerUrl: Optional[str]
     confirmations: Optional[str]
     explorerUrl: Optional[str]
@@ -10,4 +10,4 @@ class Network(TypedDict, total=False):
     nativeAssetId: Optional[str]
     nativeAssetSymbol: Optional[str]
     networkId: Optional[str]
-    tags: Optional[List[NetworkTag]]
+    tags: Optional[List[network_tag]]

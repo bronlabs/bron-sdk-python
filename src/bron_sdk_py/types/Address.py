@@ -1,11 +1,11 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Optional, TypedDict
 
-class Address(TypedDict, total=False):
+class address(TypedDict, total=False):
     acceptsAllAssets: bool
     accountId: Optional[str]
-    accountType: AccountType
-    activatedAssets: Optional[List[ActivatedAsset]]
+    accountType: account_type
+    activatedAssets: Optional[List[activated_asset]]
     address: Optional[str]
     addressId: str
     createdAt: str
@@ -15,7 +15,7 @@ class Address(TypedDict, total=False):
     metadata: Optional[Dict[str, Any]]
     networkId: str
     requiresAssetsActivation: bool
-    status: AddressStatus
+    status: address_status
     updatedAt: str
     updatedBy: str
     workspaceId: Optional[str]

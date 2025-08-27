@@ -1,50 +1,50 @@
 from typing import Optional, TYPE_CHECKING, cast
 from ..utils.http import HttpClient
 if TYPE_CHECKING:
-    from ..types.CancelTransaction import CancelTransaction
-    from ..types.CreateTransaction import CreateTransaction
-    from ..types.CreateTransactions import CreateTransactions
-    from ..types.Transaction import Transaction
-    from ..types.Transactions import Transactions
-    from ..types.TransactionssQuery import TransactionssQuery
+    from ..types.cancel_transaction import cancel_transaction
+    from ..types.create_transaction import create_transaction
+    from ..types.create_transactions import create_transactions
+    from ..types.get_transactions_query import get_transactions_query
+    from ..types.transaction import transaction
+    from ..types.transactions import transactions
 
 class TransactionsAPI:
     def __init__(self, http: HttpClient, workspace_id: Optional[str] = None) -> None:
         self._http = http
         self._workspace_id = workspace_id
 
-    async def getTransactions(self, query: Optional[TransactionssQuery] = None) -> "Transactions":
+    async def get_transactions(self, query: Optional[get_transactions_query] = None) -> "transactions":
         path = "/workspaces/{ws}/transactions"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("Transactions", await self._http.request(method='GET', path=path, query=query))
+        return cast("transactions", await self._http.request(method='GET', path=path, query=query))
 
-    async def createTransaction(self, body: Optional[CreateTransaction] = None) -> "Transaction":
+    async def create_transaction(self, body: Optional[create_transaction] = None) -> "transaction":
         path = "/workspaces/{ws}/transactions"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
+        return cast("transaction", await self._http.request(method='POST', path=path, body=body))
 
-    async def createMultipleTransactions(self, body: Optional[CreateTransactions] = None) -> "Transactions":
+    async def create_multiple_transactions(self, body: Optional[create_transactions] = None) -> "transactions":
         path = "/workspaces/{ws}/transactions/bulk-create"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("Transactions", await self._http.request(method='POST', path=path, body=body))
+        return cast("transactions", await self._http.request(method='POST', path=path, body=body))
 
-    async def dryRunTransaction(self, body: Optional[CreateTransaction] = None) -> "Transaction":
+    async def dry_run_transaction(self, body: Optional[create_transaction] = None) -> "transaction":
         path = "/workspaces/{ws}/transactions/dry-run"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
+        return cast("transaction", await self._http.request(method='POST', path=path, body=body))
 
-    async def getTransactionById(self, transactionId: str) -> "Transaction":
+    async def get_transaction_by_id(self, transactionId: str) -> "transaction":
         path = "/workspaces/{ws}/transactions/{transactionId}"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("Transaction", await self._http.request(method='GET', path=path))
+        return cast("transaction", await self._http.request(method='GET', path=path))
 
-    async def cancelTransaction(self, transactionId: str, body: Optional[CancelTransaction] = None) -> "Transaction":
+    async def cancel_transaction(self, transactionId: str, body: Optional[cancel_transaction] = None) -> "transaction":
         path = "/workspaces/{ws}/transactions/{transactionId}/cancel"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
+        return cast("transaction", await self._http.request(method='POST', path=path, body=body))
 
-    async def createSigningRequest(self, transactionId: str) -> "Transaction":
+    async def create_signing_request(self, transactionId: str) -> "transaction":
         path = "/workspaces/{ws}/transactions/{transactionId}/create-signing-request"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("Transaction", await self._http.request(method='POST', path=path))
+        return cast("transaction", await self._http.request(method='POST', path=path))
 

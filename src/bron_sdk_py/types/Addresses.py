@@ -1,5 +1,5 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Optional, TypedDict
 
-class Addresses(TypedDict, total=False):
-    addresses: List[Address]
+class addresses(TypedDict, total=False):
+    addresses: List[address]

@@ -1,34 +1,34 @@
 from typing import Optional, TYPE_CHECKING, cast
 from ..utils.http import HttpClient
 if TYPE_CHECKING:
-    from ..types.AddressBookRecord import AddressBookRecord
-    from ..types.AddressBookRecords import AddressBookRecords
-    from ..types.AddressBooksQuery import AddressBooksQuery
-    from ..types.CreateAddressBookRecord import CreateAddressBookRecord
-    from ..types.Unit import Unit
+    from ..types.address_book_record import address_book_record
+    from ..types.address_book_records import address_book_records
+    from ..types.create_address_book_record import create_address_book_record
+    from ..types.get_address_book_records_query import get_address_book_records_query
+    from ..types.unit import unit
 
 class AddressBookAPI:
     def __init__(self, http: HttpClient, workspace_id: Optional[str] = None) -> None:
         self._http = http
         self._workspace_id = workspace_id
 
-    async def getAddressBookRecords(self, query: Optional[AddressBooksQuery] = None) -> "AddressBookRecords":
+    async def get_address_book_records(self, query: Optional[get_address_book_records_query] = None) -> "address_book_records":
         path = "/workspaces/{ws}/address-book-records"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("AddressBookRecords", await self._http.request(method='GET', path=path, query=query))
+        return cast("address_book_records", await self._http.request(method='GET', path=path, query=query))
 
-    async def createAddressBookRecord(self, body: Optional[CreateAddressBookRecord] = None) -> "AddressBookRecord":
+    async def create_address_book_record(self, body: Optional[create_address_book_record] = None) -> "address_book_record":
         path = "/workspaces/{ws}/address-book-records"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("AddressBookRecord", await self._http.request(method='POST', path=path, body=body))
+        return cast("address_book_record", await self._http.request(method='POST', path=path, body=body))
 
-    async def deactivateAddressBookRecord(self, recordId: str) -> "Unit":
+    async def deactivate_address_book_record(self, recordId: str) -> "unit":
         path = "/workspaces/{ws}/address-book-records/{recordId}"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("Unit", await self._http.request(method='DELETE', path=path))
+        return cast("unit", await self._http.request(method='DELETE', path=path))
 
-    async def getAddressBookRecordById(self, recordId: str) -> "AddressBookRecord":
+    async def get_address_book_record_by_id(self, recordId: str) -> "address_book_record":
         path = "/workspaces/{ws}/address-book-records/{recordId}"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("AddressBookRecord", await self._http.request(method='GET', path=path))
+        return cast("address_book_record", await self._http.request(method='GET', path=path))
 
