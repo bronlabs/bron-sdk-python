@@ -1,0 +1,25 @@
+from __future__ import annotations
+from typing import Any, Dict, List, Optional, TypedDict
+
+class TransactionssQuery(TypedDict, total=False):
+    transactionIds: Optional[List[str]]
+    transactionTypes: Optional[List[TransactionType]]
+    accountTypes: Optional[List[AccountType]]
+    accountIds: Optional[List[str]]
+    transactionStatuses: Optional[List[TransactionStatus]]
+    transactionStatusNotIn: Optional[List[TransactionStatus]]
+    blockchainTxId: Optional[str]
+    toAccountId: Optional[str]
+    toAddress: Optional[str]
+    isTerminated: Optional[bool]
+    terminatedAtFrom: Optional[str]
+    terminatedAtTo: Optional[str]
+    createdAtFrom: Optional[str]
+    createdAtTo: Optional[str]
+    updatedAtFrom: Optional[str]
+    updatedAtTo: Optional[str]
+    canSignWithDeviceId: Optional[str]
+    sortDirection: Optional[SortingDirection]
+    limit: Optional[str]
+    offset: Optional[str]
+    externalId: Optional[str]

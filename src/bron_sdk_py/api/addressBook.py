@@ -1,8 +1,10 @@
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, cast
 from ..utils.http import HttpClient
 if TYPE_CHECKING:
     from ..types.AddressBookRecord import AddressBookRecord
     from ..types.AddressBookRecords import AddressBookRecords
+    from ..types.AddressBooksQuery import AddressBooksQuery
+    from ..types.CreateAddressBookRecord import CreateAddressBookRecord
     from ..types.Unit import Unit
 
 class AddressBookAPI:
@@ -10,23 +12,23 @@ class AddressBookAPI:
         self._http = http
         self._workspace_id = workspace_id
 
-    async def getAddressBookRecords(self, query: Optional[dict] = None) -> "AddressBookRecords":
+    async def getAddressBookRecords(self, query: Optional[AddressBooksQuery] = None) -> "AddressBookRecords":
         path = "/workspaces/{ws}/address-book-records"
         path = path.format(ws=self._workspace_id, **locals())
-        return await self._http.request(method='GET', path=path, query=query)
+        return cast("AddressBookRecords", await self._http.request(method='GET', path=path, query=query))
 
-    async def createAddressBookRecord(self, body: Optional[dict] = None) -> "AddressBookRecord":
+    async def createAddressBookRecord(self, body: Optional[CreateAddressBookRecord] = None) -> "AddressBookRecord":
         path = "/workspaces/{ws}/address-book-records"
         path = path.format(ws=self._workspace_id, **locals())
-        return await self._http.request(method='POST', path=path, body=body)
+        return cast("AddressBookRecord", await self._http.request(method='POST', path=path, body=body))
 
     async def deactivateAddressBookRecord(self, recordId: str) -> "Unit":
         path = "/workspaces/{ws}/address-book-records/{recordId}"
         path = path.format(ws=self._workspace_id, **locals())
-        return await self._http.request(method='DELETE', path=path)
+        return cast("Unit", await self._http.request(method='DELETE', path=path))
 
     async def getAddressBookRecordById(self, recordId: str) -> "AddressBookRecord":
         path = "/workspaces/{ws}/address-book-records/{recordId}"
         path = path.format(ws=self._workspace_id, **locals())
-        return await self._http.request(method='GET', path=path)
+        return cast("AddressBookRecord", await self._http.request(method='GET', path=path))
 

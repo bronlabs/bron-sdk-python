@@ -135,23 +135,43 @@ class OpenApiSdkGenerator:
                 if not summary:
                     continue
                 file_name = self._get_file_name(op)
-                file_data.setdefault(file_name, {"types": set(), "methods": []})
+                file_data.setdefault(file_name, {"types": set(), "methods": [], "query_params": {}})
 
                 return_type = self._get_return_type(op)
                 if return_type:
                     file_data[file_name]["types"].add(return_type)
 
+                # include request body type (if any) so it's imported behind TYPE_CHECKING
+                body_type = self._get_request_body_type(op)
+                if body_type:
+                    file_data[file_name]["types"].add(body_type)
+
+                # collect query params for this file (exclude workspaceId)
+                for p in (op.get("parameters", []) or []):
+                    if p.get("in") == "query":
+                        name = p.get("name")
+                        if name and name != "workspaceId":
+                            # store simple schema info; last one wins on duplicates
+                            file_data[file_name]["query_params"][name] = p.get("schema") or {}
+
                 method_code = self._generate_method(op, method, route)
                 file_data[file_name]["methods"].append(method_code)
 
         for file_name, data in file_data.items():
+            # if collected query params, emit a Query TypedDict and add to used types
+            if data.get("query_params"):
+                qtype = f"{self._to_pascal(file_name)}sQuery"
+                self._write_query_type_file(qtype, data["query_params"]) 
+                data["types"].add(qtype)
+                data["query_type_name"] = qtype
+
             content = self._generate_api_file(file_name, data)
             with open(os.path.join(self.api_dir, f"{file_name}.py"), "w", encoding="utf-8") as f:
                 f.write(content)
 
     def _generate_api_file(self, file_name: str, data: Dict[str, Any]) -> str:
         class_name = f"{file_name[0].upper()}{file_name[1:]}API"
-        imports = ["from typing import Optional, TYPE_CHECKING", "from ..utils.http import HttpClient"]
+        imports = ["from typing import Optional, TYPE_CHECKING, cast", "from ..utils.http import HttpClient"]
         type_imports: List[str] = []
         used_types = sorted(list(data.get("types", set())))
         if used_types:
@@ -183,9 +203,14 @@ class OpenApiSdkGenerator:
         for p in path_params:
             args.append(f"{p['name']}: str")
         if query_params:
-            args.append("query: Optional[dict] = None")
+            qtype = f"{self._to_pascal(self._get_file_name(op))}sQuery"
+            args.append(f"query: Optional[{qtype}] = None")
         if has_body:
-            args.append("body: Optional[dict] = None")
+            body_type = self._get_request_body_type(op)
+            if body_type:
+                args.append(f"body: Optional[{body_type}] = None")
+            else:
+                args.append("body: Optional[dict] = None")
 
         # path formatting
         path_expr = route.replace("{workspaceId}", "{ws}")
@@ -207,15 +232,41 @@ class OpenApiSdkGenerator:
         return_type = self._get_return_type(op)
         ret_annot = f" -> \"{return_type}\"" if return_type else ""
 
+        call_expr = f"await self._http.request({', '.join(call_args)})"
+        if return_type:
+            call_expr = f"cast(\"{return_type}\", {call_expr})"
+
         return "\n".join(
             [
-                f"    def {func_name}({', '.join(args)}){ret_annot}:",
+                f"    async def {func_name}({', '.join(args)}){ret_annot}:",
                 f"        {path_build[0]}",
                 f"        {path_build[1]}",
-                f"        return self._http.request({', '.join(call_args)})",
+                f"        return {call_expr}",
                 "",
             ]
         )
+
+    def _write_query_type_file(self, name: str, params: Dict[str, Any]) -> None:
+        """Emit a TypedDict for query params (all optional)."""
+        imports = [
+            "from __future__ import annotations",
+            "from typing import Any, Dict, List, Optional, TypedDict",
+        ]
+        fields: List[str] = []
+        for pname, pschema in (params or {}).items():
+            py_type = self._resolve_type(pschema or {})
+            opt_type = f"Optional[{py_type}]" if py_type != "Any" else "Any"
+            fields.append(f"    {pname}: {opt_type}")
+        content = "\n".join(imports + ["", f"class {name}(TypedDict, total=False):"] + (fields or ["    pass"]))
+        with open(os.path.join(self.types_dir, f"{name}.py"), "w", encoding="utf-8") as f:
+            f.write(content + "\n")
+
+    def _get_request_body_type(self, op: Dict[str, Any]) -> Optional[str]:
+        body = (op.get("requestBody") or {}).get("content", {}).get("application/json", {})
+        schema = body.get("schema") if isinstance(body, dict) else None
+        if schema and schema.get("$ref"):
+            return self._extract_ref_name(schema["$ref"])
+        return None
 
     def _get_return_type(self, op: Dict[str, Any]) -> Optional[str]:
         for code in ("200", "201"):
