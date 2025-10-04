@@ -15,13 +15,3 @@ generate-keys:
 
 update-version:
 	python scripts/update_version.py
-
-build:
-	python scripts/update_version.py
-	@echo "Build steps here (e.g., python -m build)"
-
-publish:
-	python scripts/update_version.py
-	@echo "Use your packaging flow (build wheel/sdist, bump version)"
-
-
