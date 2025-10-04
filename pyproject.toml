@@ -3,28 +3,29 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "bron-sdk-py"
+name = "bron-sdk-python"
 version = "0.1.0"
 description = "Bron SDK for Python"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-  "httpx>=0.27.0",
-  "PyJWT>=2.8.0",
-  "jwcrypto>=1.5.6",
-  "typing-extensions>=4.9.0",
-  "pytest>=8.2.0",
-  "pytest-asyncio>=0.23.6"
+    "requests>=2.31.0",
+    "httpx>=0.27.0",
+    "PyJWT>=2.8.0",
+    "jwcrypto>=1.5.6",
+    "typing-extensions>=4.9.0",
+    "pytest>=8.2.0",
+    "pytest-asyncio>=0.23.6"
 ]
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [project.scripts]
-bron-keygen = "bron_sdk_py.utils.key_generator:main"
+bron-keygen = "bron_sdk_python.utils.key_generator:main"
 
 [tool.bron]
 # When building/publishing, run scripts/update_version.py to sync version.py with pyproject version

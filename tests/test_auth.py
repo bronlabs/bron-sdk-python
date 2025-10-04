@@ -1,8 +1,7 @@
 import json
 import jwt
 
-from bron_sdk_py.utils.auth import parse_jwk_ec_private_key, generate_bron_jwt
-
+from bron_sdk_python.utils.auth import parse_jwk_ec_private_key, generate_bron_jwt
 
 MOCK_JWK = {
     "kty": "EC",
@@ -32,5 +31,3 @@ def test_generate_jwt_basic():
     assert payload["path"] == "/api/v1/workspaces"
     assert "message" in payload
     assert "iat" in payload and "exp" in payload
-
-
