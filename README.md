@@ -17,6 +17,18 @@ source .venv/bin/activate
 pip install -e .
 ```
 
+Or add this line to your requirements.txt:
+
+```
+git+https://github.com/bronlabs/bron-sdk-python.git@main
+```
+
+Then run the following command to install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Example
 
 ```python
