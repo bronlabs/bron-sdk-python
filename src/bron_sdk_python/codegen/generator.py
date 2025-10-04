@@ -87,6 +87,8 @@ class OpenApiSdkGenerator:
         return "\n".join(lines)
 
     def _generate_typed_dict(self, class_name: str, schema: Dict[str, Any]) -> str:
+        import keyword
+    
         required = set(schema.get("required", []) or [])
         props = schema.get("properties", {}) or {}
         imports: List[str] = [
@@ -96,10 +98,10 @@ class OpenApiSdkGenerator:
 
         fields: List[str] = []
         for prop, prop_schema in props.items():
+            safe_name = prop + "_" if keyword.iskeyword(prop) else prop
             py_type = self._resolve_type(prop_schema)
-            opt = "" if prop in required else "Optional[{}]".format(py_type) if py_type != "Any" else "Any"
-            final_type = py_type if prop in required else (opt if opt else py_type)
-            fields.append(f"    {prop}: {final_type}")
+            final_type = py_type if prop in required else ("Optional[{}]".format(py_type) if py_type != "Any" else "Any")
+            fields.append(f"    {safe_name}: {final_type}")
 
         return "\n".join(imports + ["", f"class {class_name}(TypedDict, total=False):"] + (fields or ["    pass"]))
 
