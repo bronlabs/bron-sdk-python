@@ -6,5 +6,7 @@ class RawTransactionParams(TypedDict, total=False):
     assetId: str
     data: Optional[str]
     feeLevel: Optional[FeeLevel]
+    networkFees: Optional[RequestedNetworkFees]
     rawTransactions: Optional[List[str]]
+    skipSimulation: Optional[bool]
     toAddress: str

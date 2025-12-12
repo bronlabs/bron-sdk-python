@@ -17,5 +17,7 @@ class TransactionType(Enum):
     LOYALTY_LOCK = "loyalty-lock"
     LOYALTY_UNLOCK = "loyalty-unlock"
     LOYALTY_COLLECT_REWARDS = "loyalty-collect-rewards"
+    CANTON_REWARD = "canton-reward"
     NFT_DEPOSIT = "nft-deposit"
     NFT_WITHDRAWAL = "nft-withdrawal"
+    NFT_ALLOWANCE = "nft-allowance"

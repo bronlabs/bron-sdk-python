@@ -11,4 +11,5 @@ class Balance(TypedDict, total=False):
     symbol: Optional[str]
     totalBalance: Optional[str]
     updatedAt: Optional[str]
+    withdrawableBalance: Optional[str]
     workspaceId: str

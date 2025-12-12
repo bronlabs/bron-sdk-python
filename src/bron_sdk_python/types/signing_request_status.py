@@ -3,6 +3,7 @@ from enum import Enum
 
 class SigningRequestStatus(Enum):
     NEW = "new"
+    SIGNING = "signing"
     SIGNED = "signed"
     BROADCASTED = "broadcasted"
     UNDER_RBF = "under-rbf"

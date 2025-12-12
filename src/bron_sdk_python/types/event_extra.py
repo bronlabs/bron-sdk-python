@@ -6,5 +6,6 @@ class EventExtra(TypedDict, total=False):
     in_: Optional[List[EventInput]]
     out: Optional[List[EventOutput]]
     rewardInfo: Optional[RewardInfo]
+    signingMessage: Optional[SigningMessage]
     stakeInfo: Optional[List[StakeInfo]]
     transactionFailed: Optional[bool]

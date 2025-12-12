@@ -6,6 +6,7 @@ class GetAssetsQuery(TypedDict, total=False):
     networkIds: Optional[List[str]]
     symbolIds: Optional[List[str]]
     contractAddress: Optional[str]
+    contractIssuer: Optional[str]
     assetType: Optional[AssetType]
     limit: Optional[str]
     offset: Optional[str]

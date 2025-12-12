@@ -7,5 +7,6 @@ class Asset(TypedDict, total=False):
     contractInformation: Optional[SmartContractInformation]
     decimals: Optional[str]
     networkId: Optional[str]
+    symbol: Optional[str]
     symbolId: Optional[str]
     verified: Optional[bool]

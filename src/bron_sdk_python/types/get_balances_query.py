@@ -4,7 +4,9 @@ from typing import Any, Dict, List, Optional, TypedDict
 class GetBalancesQuery(TypedDict, total=False):
     accountIds: Optional[List[str]]
     balanceIds: Optional[List[str]]
+    assetId: Optional[str]
     assetIds: Optional[List[str]]
+    networkId: Optional[str]
     networkIds: Optional[List[str]]
     accountTypes: Optional[List[AccountType]]
     excludedAccountTypes: Optional[List[AccountType]]

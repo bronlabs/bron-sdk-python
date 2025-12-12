@@ -8,6 +8,7 @@ class TransactionStatus(Enum):
     APPROVED = "approved"
     AWAITING_SECURITY_POLICY = "awaiting-security-policy"
     COMPLETED = "completed"
+    PARTIALLY_COMPLETED = "partially-completed"
     CANCELED = "canceled"
     EXPIRED = "expired"
     SIGNING_REQUIRED = "signing-required"
@@ -19,3 +20,5 @@ class TransactionStatus(Enum):
     REMOVED_FROM_BLOCKCHAIN = "removed-from-blockchain"
     ERROR = "error"
     AWAITING_DEPOSIT = "awaiting-deposit"
+    AWAITING_DEFI_EXECUTION = "awaiting-defi-execution"
+    ACCEPTANCE_REQUIRED = "acceptance-required"

@@ -5,6 +5,7 @@ class GetTransactionsQuery(TypedDict, total=False):
     transactionIds: Optional[List[str]]
     transactionTypes: Optional[List[TransactionType]]
     accountTypes: Optional[List[AccountType]]
+    accountId: Optional[str]
     accountIds: Optional[List[str]]
     transactionStatuses: Optional[List[TransactionStatus]]
     transactionStatusNotIn: Optional[List[TransactionStatus]]

@@ -5,7 +5,9 @@ if TYPE_CHECKING:
     from ..types.cancel_transaction import CancelTransaction
     from ..types.create_transaction import CreateTransaction
     from ..types.create_transactions import CreateTransactions
+    from ..types.dry_run_transaction import DryRunTransaction
     from ..types.get_transactions_query import GetTransactionsQuery
+    from ..types.offer_actions import OfferActions
     from ..types.transaction import Transaction
     from ..types.transaction_events import TransactionEvents
     from ..types.transactions import Transactions
@@ -30,15 +32,20 @@ class TransactionsAPI:
         path = path.format(ws=self._workspace_id, **locals())
         return cast("Transactions", await self._http.request(method='POST', path=path, body=body))
 
-    async def dry_run_transaction(self, body: Optional[CreateTransaction] = None) -> "Transaction":
+    async def dry_run_transaction(self, body: Optional[CreateTransaction] = None) -> "DryRunTransaction":
         path = "/workspaces/{ws}/transactions/dry-run"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
+        return cast("DryRunTransaction", await self._http.request(method='POST', path=path, body=body))
 
     async def get_transaction_by_id(self, transactionId: str) -> "Transaction":
         path = "/workspaces/{ws}/transactions/{transactionId}"
         path = path.format(ws=self._workspace_id, **locals())
         return cast("Transaction", await self._http.request(method='GET', path=path))
+
+    async def accept_deposit_offer(self, transactionId: str, body: Optional[OfferActions] = None) -> "Transaction":
+        path = "/workspaces/{ws}/transactions/{transactionId}/accept-deposit-offer"
+        path = path.format(ws=self._workspace_id, **locals())
+        return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
 
     async def cancel_transaction(self, transactionId: str, body: Optional[CancelTransaction] = None) -> "Transaction":
         path = "/workspaces/{ws}/transactions/{transactionId}/cancel"
@@ -54,4 +61,9 @@ class TransactionsAPI:
         path = "/workspaces/{ws}/transactions/{transactionId}/events"
         path = path.format(ws=self._workspace_id, **locals())
         return cast("TransactionEvents", await self._http.request(method='GET', path=path))
+
+    async def reject_outgoing_offer(self, transactionId: str, body: Optional[OfferActions] = None) -> "Transaction":
+        path = "/workspaces/{ws}/transactions/{transactionId}/reject-outgoing-offer"
+        path = path.format(ws=self._workspace_id, **locals())
+        return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
 
