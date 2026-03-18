@@ -22,7 +22,7 @@ def parse_jwk_ec_private_key(jwk_string: str) -> Tuple[jwk.JWK, str]:
 def generate_bron_jwt(*, method: str, path: str, body: str, kid: str, private_jwk: str) -> str:
     iat = int(time.time())
     exp = iat + 300
-    message_string = f"{iat}{(method or '').upper()}{path or ''}{body or ''}"
+    message_string = f"{iat}\n{(method or '').upper()}\n{path or ''}\n{body or ''}"
     hash_hex = hashlib.sha256(message_string.encode()).hexdigest()
 
     header = {"alg": "ES256", "kid": kid}
