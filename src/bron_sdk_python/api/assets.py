@@ -3,6 +3,7 @@ from typing import Optional, TYPE_CHECKING, cast
 from ..utils.http import HttpClient
 if TYPE_CHECKING:
     from ..types.asset import Asset
+    from ..types.asset_market_prices import AssetMarketPrices
     from ..types.assets import Assets
     from ..types.get_asset_by_id_query import GetAssetByIdQuery
     from ..types.get_assets_query import GetAssetsQuery
@@ -20,6 +21,11 @@ class AssetsAPI:
     def __init__(self, http: HttpClient, workspace_id: Optional[str] = None) -> None:
         self._http = http
         self._workspace_id = workspace_id
+
+    async def get_asset_prices(self) -> "AssetMarketPrices":
+        path = "/dictionary/asset-market-prices"
+        path = path.format(**locals())
+        return cast("AssetMarketPrices", await self._http.request(method='GET', path=path))
 
     async def get_assets(self, query: Optional[GetAssetsQuery] = None) -> "Assets":
         path = "/dictionary/assets"

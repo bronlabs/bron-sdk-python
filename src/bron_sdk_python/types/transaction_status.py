@@ -20,5 +20,7 @@ class TransactionStatus(Enum):
     REMOVED_FROM_BLOCKCHAIN = "removed-from-blockchain"
     ERROR = "error"
     AWAITING_DEPOSIT = "awaiting-deposit"
+    AWAITING_CONVERSION = "awaiting-conversion"
+    AWAITING_PAYOUT = "awaiting-payout"
     AWAITING_DEFI_EXECUTION = "awaiting-defi-execution"
     ACCEPTANCE_REQUIRED = "acceptance-required"

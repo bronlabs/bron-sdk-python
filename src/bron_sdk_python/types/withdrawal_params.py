@@ -13,3 +13,4 @@ class WithdrawalParams(TypedDict, total=False):
     toAccountId: Optional[str]
     toAddress: Optional[str]
     toAddressBookRecordId: Optional[str]
+    toWorkspaceTag: Optional[str]

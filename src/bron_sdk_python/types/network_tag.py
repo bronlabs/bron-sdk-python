@@ -10,3 +10,5 @@ class NetworkTag(Enum):
     SUPPORTS_PARALLEL_SIGNING = "supports-parallel-signing"
     SUPPORTS_CHAINED_SIGNING = "supports-chained-signing"
     SUPPORTS_FEE_LEVELS = "supports-fee-levels"
+    EVM = "evm"
+    BRIDGE = "bridge"

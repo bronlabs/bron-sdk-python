@@ -4,7 +4,8 @@ SHELL := /bin/bash
 VERSION ?= $(shell git describe --tags --abbrev=0 | sed 's/v//' | awk -F. '{$$NF = $$NF + 1;} 1' | sed 's/ /./g')
 
 generate:
-	python3 -m venv .venv
+	python3 -m venv --clear .venv
+	.venv/bin/pip install -q -e .
 	.venv/bin/python -m bron_sdk_python.codegen.generator bron-open-api-public.json src/bron_sdk_python/types src/bron_sdk_python/api
 
 lint:

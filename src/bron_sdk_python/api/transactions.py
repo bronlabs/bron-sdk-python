@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Optional, TYPE_CHECKING, cast
 from ..utils.http import HttpClient
 if TYPE_CHECKING:
+    from ..types.approve_transaction import ApproveTransaction
     from ..types.cancel_transaction import CancelTransaction
     from ..types.create_transaction import CreateTransaction
     from ..types.create_transactions import CreateTransactions
@@ -47,6 +48,11 @@ class TransactionsAPI:
         path = path.format(ws=self._workspace_id, **locals())
         return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
 
+    async def approve_transaction(self, transactionId: str, body: Optional[ApproveTransaction] = None) -> "Transaction":
+        path = "/workspaces/{ws}/transactions/{transactionId}/approve"
+        path = path.format(ws=self._workspace_id, **locals())
+        return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
+
     async def cancel_transaction(self, transactionId: str, body: Optional[CancelTransaction] = None) -> "Transaction":
         path = "/workspaces/{ws}/transactions/{transactionId}/cancel"
         path = path.format(ws=self._workspace_id, **locals())
@@ -56,6 +62,11 @@ class TransactionsAPI:
         path = "/workspaces/{ws}/transactions/{transactionId}/create-signing-request"
         path = path.format(ws=self._workspace_id, **locals())
         return cast("Transaction", await self._http.request(method='POST', path=path))
+
+    async def decline_transaction(self, transactionId: str, body: Optional[CancelTransaction] = None) -> "Transaction":
+        path = "/workspaces/{ws}/transactions/{transactionId}/decline"
+        path = path.format(ws=self._workspace_id, **locals())
+        return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
 
     async def get_transaction_events(self, transactionId: str) -> "TransactionEvents":
         path = "/workspaces/{ws}/transactions/{transactionId}/events"
