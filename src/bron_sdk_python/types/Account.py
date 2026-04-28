@@ -9,6 +9,7 @@ class Account(TypedDict, total=False):
     createdBy: Optional[str]
     externalId: str
     extra: Optional[AccountExtra]
+    icon: Optional[str]
     isTestnet: Optional[bool]
     parentAccountId: Optional[str]
     status: AccountStatus
