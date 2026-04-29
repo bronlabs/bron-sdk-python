@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from ..types.asset_market_prices import AssetMarketPrices
     from ..types.assets import Assets
     from ..types.get_asset_by_id_query import GetAssetByIdQuery
+    from ..types.get_asset_prices_query import GetAssetPricesQuery
     from ..types.get_assets_query import GetAssetsQuery
     from ..types.get_networks_query import GetNetworksQuery
     from ..types.get_prices_query import GetPricesQuery
@@ -22,10 +23,10 @@ class AssetsAPI:
         self._http = http
         self._workspace_id = workspace_id
 
-    async def get_asset_prices(self) -> "AssetMarketPrices":
+    async def get_asset_prices(self, query: Optional[GetAssetPricesQuery] = None) -> "AssetMarketPrices":
         path = "/dictionary/asset-market-prices"
         path = path.format(**locals())
-        return cast("AssetMarketPrices", await self._http.request(method='GET', path=path))
+        return cast("AssetMarketPrices", await self._http.request(method='GET', path=path, query=query))
 
     async def get_assets(self, query: Optional[GetAssetsQuery] = None) -> "Assets":
         path = "/dictionary/assets"
