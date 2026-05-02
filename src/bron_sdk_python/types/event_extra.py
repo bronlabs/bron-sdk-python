@@ -9,3 +9,4 @@ class EventExtra(TypedDict, total=False):
     signingMessage: Optional[SigningMessage]
     stakeInfo: Optional[List[EventStakeInfo]]
     transactionFailed: Optional[bool]
+    walletStateInit: Optional[str]

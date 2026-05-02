@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, TypedDict
 
 class GetTransactionsQuery(TypedDict, total=False):
+    transactionId: Optional[str]
     transactionIds: Optional[List[str]]
     transactionTypes: Optional[List[TransactionType]]
     accountTypes: Optional[List[AccountType]]
