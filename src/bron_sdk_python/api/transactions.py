@@ -4,6 +4,7 @@ from ..utils.http import HttpClient
 if TYPE_CHECKING:
     from ..types.approve_transaction import ApproveTransaction
     from ..types.cancel_transaction import CancelTransaction
+    from ..types.create_signing_request import CreateSigningRequest
     from ..types.create_transaction import CreateTransaction
     from ..types.create_transactions import CreateTransactions
     from ..types.dry_run_transaction import DryRunTransaction
@@ -58,10 +59,10 @@ class TransactionsAPI:
         path = path.format(ws=self._workspace_id, **locals())
         return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
 
-    async def create_signing_request(self, transactionId: str) -> "Transaction":
+    async def create_signing_request(self, transactionId: str, body: Optional[CreateSigningRequest] = None) -> "Transaction":
         path = "/workspaces/{ws}/transactions/{transactionId}/create-signing-request"
         path = path.format(ws=self._workspace_id, **locals())
-        return cast("Transaction", await self._http.request(method='POST', path=path))
+        return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
 
     async def decline_transaction(self, transactionId: str, body: Optional[CancelTransaction] = None) -> "Transaction":
         path = "/workspaces/{ws}/transactions/{transactionId}/decline"

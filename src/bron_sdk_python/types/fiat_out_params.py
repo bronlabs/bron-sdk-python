@@ -6,5 +6,4 @@ class FiatOutParams(TypedDict, total=False):
     assetId: str
     feeLevel: Optional[FeeLevel]
     fiatAssetId: str
-    networkId: str
     toAddressBookRecordId: str

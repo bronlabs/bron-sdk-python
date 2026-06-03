@@ -3,5 +3,6 @@ from typing import Any, Dict, List, Optional, TypedDict
 
 class MessagesForSigning(TypedDict, total=False):
     messages: Optional[List[MessageForSigning]]
+    primitivesVersion: Optional[str]
     publicKey: Optional[str]
     useBackupPrimitive: Optional[bool]

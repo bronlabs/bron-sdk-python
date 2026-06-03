@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Optional, TypedDict
 class CreateAddressBookRecord(TypedDict, total=False):
     accountIds: Optional[List[str]]
     address: Optional[str]
+    bankDetails: Optional[BankDetails]
     externalId: str
     imageId: Optional[str]
     memo: Optional[str]

@@ -8,7 +8,6 @@ class DefiParams(TypedDict, total=False):
     method: str
     networkId: str
     origin: str
-    rawTransaction: Optional[str]
     rawTransactions: Optional[List[str]]
     to: Optional[str]
     value: Optional[str]
