@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Optional, TypedDict
 
 class DryRunTransaction(TypedDict, total=False):
     accountId: str
+    description: Optional[str]
     estimations: Optional[List[TransactionEstimation]]
     externalId: Optional[str]
     extra: Optional[TransactionExtra]

@@ -6,10 +6,12 @@ class Intent(TypedDict, total=False):
     expiresAt: Optional[str]
     fromAmount: Optional[str]
     fromAssetId: str
+    fromTokenId: Optional[str]
     intentId: str
     price: Optional[str]
     status: IntentOrderStatus
     toAmount: Optional[str]
     toAssetId: str
+    toTokenId: Optional[str]
     updatedAt: str
     userSettlementDeadline: Optional[str]

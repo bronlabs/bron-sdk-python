@@ -4,4 +4,5 @@ from typing import Any, Dict, List, Optional, TypedDict
 class StakeUnDelegationParams(TypedDict, total=False):
     amount: Optional[str]
     assetId: str
+    resource: Optional[StakeResource]
     stakeId: Optional[str]

@@ -6,7 +6,6 @@ class GetAccountsQuery(TypedDict, total=False):
     excludedAccountTypes: Optional[List[AccountType]]
     statuses: Optional[List[AccountStatus]]
     accountIds: Optional[List[str]]
-    isDefiVault: Optional[bool]
     offset: Optional[str]
     limit: Optional[str]
     isTestnet: Optional[bool]

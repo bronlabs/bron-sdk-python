@@ -7,6 +7,8 @@ class SigningRequestStatus(Enum):
     SIGNED = "signed"
     BROADCASTED = "broadcasted"
     UNDER_RBF = "under-rbf"
+    WAITING_EXTERNAL_BROADCAST = "waiting-external-broadcast"
+    WAITING_SPONSORED_BROADCAST = "waiting-sponsored-broadcast"
     COMPLETED = "completed"
     MANUAL_RESOLVING = "manual-resolving"
     CANCELED = "canceled"

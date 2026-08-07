@@ -8,4 +8,5 @@ class ChartPeriod(Enum):
     TYPE_1M = "1m"
     TYPE_6M = "6m"
     TYPE_1Y = "1y"
+    YTD = "ytd"
     ALL = "all"

@@ -4,3 +4,4 @@ from typing import Any, Dict, List, Optional, TypedDict
 class Signed(TypedDict, total=False):
     signature: Optional[str]
     signatures: Optional[List[Signature]]
+    txRaw: Optional[str]

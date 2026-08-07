@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Optional, TypedDict
 class WithdrawalParams(TypedDict, total=False):
     amount: str
     assetId: Optional[str]
+    feeAssetId: Optional[str]
     feeLevel: Optional[FeeLevel]
     includeFee: Optional[bool]
     memo: Optional[str]

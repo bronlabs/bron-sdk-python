@@ -7,6 +7,7 @@ class EventType(Enum):
     FEE = "fee"
     NEGATIVE_DEPOSIT = "negative-deposit"
     STAKE_DEPOSIT = "stake-deposit"
+    STAKE_WITHDRAWAL_REQUESTED = "stake-withdrawal-requested"
     STAKE_DELEGATION = "stake-delegation"
     STAKE_UNDELEGATION = "stake-undelegation"
     STAKE_WITHDRAWN = "stake-withdrawn"

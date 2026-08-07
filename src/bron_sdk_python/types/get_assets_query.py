@@ -8,6 +8,7 @@ class GetAssetsQuery(TypedDict, total=False):
     contractAddress: Optional[str]
     contractIssuer: Optional[str]
     assetType: Optional[AssetType]
+    used: Optional[bool]
     search: Optional[str]
     limit: Optional[str]
     offset: Optional[str]

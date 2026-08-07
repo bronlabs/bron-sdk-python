@@ -14,5 +14,7 @@ class GetBalancesQuery(TypedDict, total=False):
     excludedAccountTypes: Optional[List[AccountType]]
     updatedSince: Optional[str]
     nonEmpty: Optional[bool]
+    riskScoreThreshold: Optional[str]
+    isTestnet: Optional[bool]
     limit: Optional[str]
     offset: Optional[str]

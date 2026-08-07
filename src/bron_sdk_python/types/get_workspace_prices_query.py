@@ -1,0 +1,7 @@
+from __future__ import annotations
+from typing import Any, Dict, List, Optional, TypedDict
+
+class GetWorkspacePricesQuery(TypedDict, total=False):
+    baseSymbolIds: Optional[List[str]]
+    baseAssetIds: Optional[List[str]]
+    used: Optional[bool]

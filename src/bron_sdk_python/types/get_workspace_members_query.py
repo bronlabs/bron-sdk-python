@@ -5,3 +5,5 @@ class GetWorkspaceMembersQuery(TypedDict, total=False):
     includePermissionGroups: Optional[bool]
     includeUsersProfiles: Optional[bool]
     includeEmails: Optional[bool]
+    limit: Optional[str]
+    offset: Optional[str]

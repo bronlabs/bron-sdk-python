@@ -9,6 +9,8 @@ class GetAddressBookRecordsQuery(TypedDict, total=False):
     tag: Optional[str]
     limit: Optional[str]
     offset: Optional[str]
+    sortBy: Optional[AddressBookSortBy]
+    sortDirection: Optional[SortingDirection]
     recordType: Optional[RecordType]
     recordTypes: Optional[List[RecordType]]
     statuses: Optional[List[RecordStatus]]

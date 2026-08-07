@@ -5,6 +5,7 @@ class TransactionExtra(TypedDict, total=False):
     approvers: Optional[TransactionApprovers]
     blockchainDetails: Optional[List[BlockchainTxDetails]]
     blockchainRequest: Optional[BlockchainRequest]
+    bronLock: Optional[BronLockExtra]
     confirmations: Optional[str]
     depositTransactionId: Optional[str]
     description: Optional[str]

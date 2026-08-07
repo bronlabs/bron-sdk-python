@@ -5,3 +5,4 @@ class StakeDelegationParams(TypedDict, total=False):
     amount: Optional[str]
     assetId: str
     poolId: Optional[str]
+    resource: Optional[StakeResource]

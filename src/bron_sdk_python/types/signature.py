@@ -1,3 +1,10 @@
-from typing import Dict, Any
+from __future__ import annotations
+from typing import Any, Dict, List, Optional, TypedDict
 
-Signature = Dict[str, Any]
+class Signature(TypedDict, total=False):
+    e: Optional[str]
+    r: Optional[str]
+    rx: Optional[str]
+    s: Optional[str]
+    signature: Optional[str]
+    v: Optional[str]

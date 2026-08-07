@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from ..types.get_prices_query import GetPricesQuery
     from ..types.get_symbol_by_id_query import GetSymbolByIdQuery
     from ..types.get_symbols_query import GetSymbolsQuery
+    from ..types.get_workspace_prices_query import GetWorkspacePricesQuery
     from ..types.network import Network
     from ..types.networks import Networks
     from ..types.symbol import Symbol
@@ -69,4 +70,9 @@ class AssetsAPI:
         path = "/dictionary/symbols/{symbolId}"
         path = path.format(**locals())
         return cast("Symbol", await self._http.request(method='GET', path=path, query=query))
+
+    async def get_workspace_prices(self, query: Optional[GetWorkspacePricesQuery] = None) -> "SymbolMarketPrices":
+        path = "/workspaces/{ws}/symbol-market-prices"
+        path = path.format(ws=self._workspace_id, **locals())
+        return cast("SymbolMarketPrices", await self._http.request(method='GET', path=path, query=query))
 
