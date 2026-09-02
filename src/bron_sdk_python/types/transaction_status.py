@@ -22,5 +22,6 @@ class TransactionStatus(Enum):
     AWAITING_DEPOSIT = "awaiting-deposit"
     AWAITING_CONVERSION = "awaiting-conversion"
     AWAITING_PAYOUT = "awaiting-payout"
+    AWAITING_USER_RESPONSE = "awaiting-user-response"
     AWAITING_DEFI_EXECUTION = "awaiting-defi-execution"
     ACCEPTANCE_REQUIRED = "acceptance-required"

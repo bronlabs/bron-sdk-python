@@ -1,3 +1,5 @@
-from typing import Dict, Any
+from __future__ import annotations
+from typing import Any, Dict, List, Optional, TypedDict
 
-AccountExtra = Dict[str, Any]
+class AccountExtra(TypedDict, total=False):
+    onlyAddressBookWithdrawals: Optional[bool]

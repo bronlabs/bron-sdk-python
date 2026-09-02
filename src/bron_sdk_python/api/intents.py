@@ -5,12 +5,18 @@ if TYPE_CHECKING:
     from ..types.create_intent import CreateIntent
     from ..types.intent import Intent
     from ..types.intents_quote import IntentsQuote
+    from ..types.public_intent_pairs import PublicIntentPairs
     from ..types.request_indicative_swap_quote_query import RequestIndicativeSwapQuoteQuery
 
 class IntentsAPI:
     def __init__(self, http: HttpClient, workspace_id: Optional[str] = None) -> None:
         self._http = http
         self._workspace_id = workspace_id
+
+    async def get_intent_swap_pairs(self) -> "PublicIntentPairs":
+        path = "/dictionary/intent-pairs"
+        path = path.format(**locals())
+        return cast("PublicIntentPairs", await self._http.request(method='GET', path=path))
 
     async def create_intent_request(self, body: Optional[CreateIntent] = None) -> "Intent":
         path = "/workspaces/{ws}/intents"

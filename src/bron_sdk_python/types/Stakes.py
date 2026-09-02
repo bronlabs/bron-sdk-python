@@ -1,3 +1,6 @@
-from typing import Dict, Any
+from __future__ import annotations
+from typing import Any, Dict, List, Optional, TypedDict
 
-Stakes = Dict[str, Any]
+class Stakes(TypedDict, total=False):
+    _embedded: Optional[StakesEmbedded]
+    stakes: Optional[List[Stake]]
