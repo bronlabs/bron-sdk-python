@@ -19,7 +19,7 @@ generate-keys:
 
 update-version:
 	VERSION=${VERSION} python scripts/update_version.py
-	git tag v${VERSION} -m "Release ${VERSION}"
 	git commit -am "Update version to ${VERSION}"
+	git tag v${VERSION} -m "Release ${VERSION}"
 	git push origin master
 	git push --tags
