@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from ..types.dry_run_transaction import DryRunTransaction
     from ..types.get_transactions_query import GetTransactionsQuery
     from ..types.offer_actions import OfferActions
+    from ..types.swap_route import SwapRoute
     from ..types.transaction import Transaction
     from ..types.transaction_events import TransactionEvents
     from ..types.transactions import Transactions
@@ -36,6 +37,11 @@ class TransactionsAPI:
 
     async def dry_run_transaction(self, body: Optional[CreateTransaction] = None) -> "DryRunTransaction":
         path = "/workspaces/{ws}/transactions/dry-run"
+        path = path.format(ws=self._workspace_id, **locals())
+        return cast("DryRunTransaction", await self._http.request(method='POST', path=path, body=body))
+
+    async def get_swap_route(self, body: Optional[SwapRoute] = None) -> "DryRunTransaction":
+        path = "/workspaces/{ws}/transactions/swap-route"
         path = path.format(ws=self._workspace_id, **locals())
         return cast("DryRunTransaction", await self._http.request(method='POST', path=path, body=body))
 

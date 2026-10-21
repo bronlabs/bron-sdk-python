@@ -5,3 +5,5 @@ class TransactionEmbedded(TypedDict, total=False):
     attestationSignature: Optional[AttestationSignature]
     currentSigningRequest: Optional[SigningRequest]
     events: Optional[List[TransactionEvent]]
+    intentsQuote: Optional[IntentsQuoteEmbedded]
+    quoteDetails: Optional[QuoteDetails]

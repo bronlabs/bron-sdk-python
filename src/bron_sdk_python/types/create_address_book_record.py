@@ -5,8 +5,11 @@ class CreateAddressBookRecord(TypedDict, total=False):
     accountIds: Optional[List[str]]
     address: Optional[str]
     bankDetails: Optional[BankDetails]
+    email: Optional[str]
     externalId: str
     imageId: Optional[str]
+    isFavorite: Optional[bool]
+    labels: Optional[List[str]]
     memo: Optional[str]
     name: str
     networkId: Optional[str]

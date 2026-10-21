@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, TypedDict
 
 class DryRunTransaction(TypedDict, total=False):
+    _embedded: Optional[TransactionEmbedded]
     accountId: str
     description: Optional[str]
     estimations: Optional[List[TransactionEstimation]]

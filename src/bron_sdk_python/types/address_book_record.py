@@ -3,11 +3,15 @@ from typing import Any, Dict, List, Optional, TypedDict
 
 class AddressBookRecord(TypedDict, total=False):
     accountIds: Optional[List[str]]
+    activatedAt: Optional[str]
     address: Optional[str]
     createdAt: str
     createdBy: Optional[str]
+    email: Optional[str]
     externalId: str
     imageId: Optional[str]
+    isFavorite: Optional[bool]
+    labels: Optional[List[str]]
     lastUsedAt: Optional[str]
     memo: Optional[str]
     name: str

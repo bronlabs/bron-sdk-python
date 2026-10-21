@@ -2,11 +2,11 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, TypedDict
 
 class Transaction(TypedDict, total=False):
+    _embedded: Optional[TransactionEmbedded]
     accountId: str
     accountType: AccountType
     createdAt: str
     createdBy: Optional[str]
-    embedded: Optional[TransactionEmbedded]
     expiresAt: Optional[str]
     externalId: str
     extra: Optional[TransactionExtra]

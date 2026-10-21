@@ -14,3 +14,6 @@ class GetAddressBookRecordsQuery(TypedDict, total=False):
     recordType: Optional[RecordType]
     recordTypes: Optional[List[RecordType]]
     statuses: Optional[List[RecordStatus]]
+    label: Optional[str]
+    isFavorite: Optional[bool]
+    includeLabels: Optional[bool]

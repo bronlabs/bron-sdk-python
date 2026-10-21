@@ -10,6 +10,7 @@ class WithdrawalParams(TypedDict, total=False):
     memo: Optional[str]
     networkFees: Optional[RequestedNetworkFees]
     networkId: Optional[str]
+    recipientEmail: Optional[str]
     symbol: Optional[str]
     toAccountId: Optional[str]
     toAddress: Optional[str]

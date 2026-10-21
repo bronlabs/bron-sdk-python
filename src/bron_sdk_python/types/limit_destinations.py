@@ -7,3 +7,4 @@ class LimitDestinations(TypedDict, total=False):
     toAccounts: Optional[bool]
     toAddressBook: Optional[bool]
     toExternalAddresses: Optional[bool]
+    toFirstTimeRecipients: Optional[bool]

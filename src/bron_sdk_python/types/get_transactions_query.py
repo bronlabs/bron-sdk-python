@@ -30,6 +30,7 @@ class GetTransactionsQuery(TypedDict, total=False):
     limit: Optional[str]
     offset: Optional[str]
     externalId: Optional[str]
+    loanId: Optional[str]
     includeEvents: Optional[bool]
     includeCurrentSigningRequest: Optional[bool]
     includeAttestationSignature: Optional[bool]

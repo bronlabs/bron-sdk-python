@@ -6,4 +6,5 @@ class BankChannelType(Enum):
     ACH = "ach"
     SWIFT = "swift"
     FEDWIRE = "fedwire"
+    FEDNOW = "fednow"
     LOCAL = "local"

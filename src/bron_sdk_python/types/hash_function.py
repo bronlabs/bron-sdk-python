@@ -11,3 +11,4 @@ class HashFunction(Enum):
     SHA512_HALF = "sha512_half"
     SHA512_256 = "sha512_256"
     POSEIDON = "poseidon"
+    BLAKE2B256_PERSONAL = "blake2b256-personal"
