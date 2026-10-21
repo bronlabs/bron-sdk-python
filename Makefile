@@ -12,7 +12,9 @@ lint:
 	python -m pyflakes src || true
 
 test:
-	python -m pytest -q tests
+	[ -x .venv/bin/python ] || python3 -m venv .venv
+	.venv/bin/pip install -q -e . pytest
+	.venv/bin/python -m pytest -q tests
 
 generate-keys:
 	python -m bron_sdk_python.utils.key_generator
