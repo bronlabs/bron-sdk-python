@@ -13,5 +13,6 @@ class CreateAddressBookRecord(TypedDict, total=False):
     memo: Optional[str]
     name: str
     networkId: Optional[str]
+    note: Optional[str]
     recordType: Optional[RecordType]
     tag: Optional[str]

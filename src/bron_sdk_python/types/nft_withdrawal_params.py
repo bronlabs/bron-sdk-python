@@ -7,6 +7,7 @@ class NFTWithdrawalParams(TypedDict, total=False):
     feeLevel: Optional[FeeLevel]
     includeFee: Optional[bool]
     networkFees: Optional[RequestedNetworkFees]
+    recipientEmail: Optional[str]
     toAccountId: Optional[str]
     toAddress: Optional[str]
     toAddressBookRecordId: Optional[str]

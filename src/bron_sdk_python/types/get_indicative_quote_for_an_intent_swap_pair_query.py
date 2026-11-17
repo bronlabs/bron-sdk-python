@@ -1,8 +1,7 @@
 from __future__ import annotations
 from typing import Any, Dict, List, Optional, TypedDict
 
-class RequestIndicativeSwapQuoteQuery(TypedDict, total=False):
-    fromAssetId: Optional[str]
-    toAssetId: Optional[str]
+class GetIndicativeQuoteForAnIntentSwapPairQuery(TypedDict, total=False):
     fromAmount: Optional[str]
     toAmount: Optional[str]
+    broadcasterFeePercent: Optional[str]

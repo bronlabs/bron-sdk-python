@@ -16,6 +16,7 @@ class AddressBookRecord(TypedDict, total=False):
     memo: Optional[str]
     name: str
     networkId: Optional[str]
+    note: Optional[str]
     recordId: str
     recordType: RecordType
     status: RecordStatus

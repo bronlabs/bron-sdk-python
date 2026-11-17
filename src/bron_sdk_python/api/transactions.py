@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from ..types.dry_run_transaction import DryRunTransaction
     from ..types.get_transactions_query import GetTransactionsQuery
     from ..types.offer_actions import OfferActions
+    from ..types.recreate_signing_request import RecreateSigningRequest
     from ..types.swap_route import SwapRoute
     from ..types.transaction import Transaction
     from ..types.transaction_events import TransactionEvents
@@ -75,10 +76,20 @@ class TransactionsAPI:
         path = path.format(ws=self._workspace_id, **locals())
         return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
 
+    async def dry_run_recreate_signing_request(self, transactionId: str, body: Optional[RecreateSigningRequest] = None) -> "Transaction":
+        path = "/workspaces/{ws}/transactions/{transactionId}/dry-run-recreate-signing-request"
+        path = path.format(ws=self._workspace_id, **locals())
+        return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
+
     async def get_transaction_events(self, transactionId: str) -> "TransactionEvents":
         path = "/workspaces/{ws}/transactions/{transactionId}/events"
         path = path.format(ws=self._workspace_id, **locals())
         return cast("TransactionEvents", await self._http.request(method='GET', path=path))
+
+    async def recreate_signing_request(self, transactionId: str, body: Optional[RecreateSigningRequest] = None) -> "Transaction":
+        path = "/workspaces/{ws}/transactions/{transactionId}/recreate-signing-request"
+        path = path.format(ws=self._workspace_id, **locals())
+        return cast("Transaction", await self._http.request(method='POST', path=path, body=body))
 
     async def reject_outgoing_offer(self, transactionId: str, body: Optional[OfferActions] = None) -> "Transaction":
         path = "/workspaces/{ws}/transactions/{transactionId}/reject-outgoing-offer"

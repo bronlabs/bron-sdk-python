@@ -27,6 +27,7 @@ class EventType(Enum):
     LOAN_UNLOCK_COLLATERAL = "loan-unlock-collateral"
     LOAN_BORROW = "loan-borrow"
     LOAN_REPAY = "loan-repay"
+    LOAN_LIQUIDATION = "loan-liquidation"
     CANTON_REWARD = "canton-reward"
     MESSAGE_SIGNED = "message-signed"
     DEPOSIT_OFFER = "deposit-offer"

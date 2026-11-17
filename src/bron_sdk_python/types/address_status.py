@@ -12,3 +12,4 @@ class AddressStatus(Enum):
     DISABLED = "disabled"
     ERROR = "error"
     ACCOUNT_ARCHIVED = "account-archived"
+    PAUSED = "paused"
