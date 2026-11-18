@@ -13,7 +13,7 @@ lint:
 
 test:
 	[ -x .venv/bin/python ] || python3 -m venv .venv
-	.venv/bin/pip install -q -e . pytest
+	.venv/bin/pip install -q -e '.[dev]'
 	.venv/bin/python -m pytest -q tests
 
 generate-keys:
